@@ -1,3 +1,5 @@
+// const fetch = require('node-fetch');
+
 const fetchAPI = async (QUERY) => fetch(`https://api.mercadolibre.com/sites/MLB/search?q=${QUERY}`);
 
 const result = [];
@@ -22,8 +24,6 @@ const fetchProducts = async (QUERY) => {
     throw await error.message;
   }
 };
-
-fetchProducts('computador'); 
 
 // console.log(results); 
 
