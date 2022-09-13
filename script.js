@@ -49,8 +49,12 @@ const createProductItemElement = ({ id, title, thumbnail }) => {
   return section;
 };
 
-const lista = document.getElementsByClassName('items');
-results.forEach(async (e) => lista[0].appendChild(createProductItemElement(e)));
+const baixaProdutos = async () => {
+  const lista = document.getElementsByClassName('items');
+  await result.forEach(async (e) => lista[0].appendChild(createProductItemElement(e)));
+};
+
+baixaProdutos();
 
 /**
  * Função que recupera o ID do produto passado como parâmetro.
@@ -75,4 +79,4 @@ const createCartItemElement = ({ id, title, price }) => {
   return li;
 };
 
-window.onload = () => { };
+window.onload = baixaProdutos();
