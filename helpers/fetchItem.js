@@ -1,4 +1,4 @@
-const fetchAPI = async (ItemID) => fetch(`https://api.mercadolibre.com/items/${ItemID}`);
+const fetchItemAPI = async (ItemID) => fetch(`https://api.mercadolibre.com/items/${ItemID}`);
 
 const fetchItem = async (ItemID) => {
   // seu código aqui
@@ -6,7 +6,7 @@ const fetchItem = async (ItemID) => {
     if (typeof ItemID === 'undefined') {
       throw new Error('You must provide an url');
     }
-    const getAPI = fetchAPI(ItemID)
+    const getAPI = fetchItemAPI(ItemID)
       .then((response) => response.json());
     return getAPI;
   } catch (error) {
