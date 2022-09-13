@@ -28,6 +28,6 @@ describe('1 - Teste a função fetchProducts', () => {
   })
 
   test('if an empty url throws an error', async () => {
-    await expect(fetchProducts()).rejects.toBe('Raiva');
+    await expect(fetchProducts()).rejects.toBe('You must provide an url');
   })
 });

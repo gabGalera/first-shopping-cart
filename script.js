@@ -40,14 +40,17 @@ const createCustomElement = (element, className, innerText) => {
 const createProductItemElement = ({ id, title, thumbnail }) => {
   const section = document.createElement('section');
   section.className = 'item';
-
+  
   section.appendChild(createCustomElement('span', 'item_id', id));
   section.appendChild(createCustomElement('span', 'item__title', title));
   section.appendChild(createProductImageElement(thumbnail));
   section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
-
+  
   return section;
 };
+
+const lista = document.getElementsByClassName('items');
+results.forEach(async (e) => lista[0].appendChild(createProductItemElement(e)));
 
 /**
  * Função que recupera o ID do produto passado como parâmetro.
