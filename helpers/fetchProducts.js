@@ -14,7 +14,7 @@ const fetchProducts = async (QUERY) => {
     const arr = getAPI.map(async (e) => {
       const { id, title, thumbnail } = e; 
       results.push({ id, title, thumbnail });
-      return { id, title, thumbnail };
+      return results;
     });
     return arr;
   } catch (error) {
@@ -22,7 +22,7 @@ const fetchProducts = async (QUERY) => {
   }
 };
 
-const arr = fetchProducts('computador'); 
+fetchProducts('computador'); 
 
 // console.log(results); 
 
