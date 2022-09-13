@@ -40,8 +40,9 @@ const createCustomElement = (element, className, innerText) => {
 const createCartItemElement = ({ id, title, price }) => {
   const li = document.createElement('li');
   li.className = 'cart__item';
+  li.id = id;
   li.innerText = `ID: ${id} | TITLE: ${title} | PRICE: $${price}`;
-  // li.addEventListener('click', () => colocaNoCarrinho());
+  li.addEventListener('click', () => document.getElementById(id).remove());
   return li;
 };
 
