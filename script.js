@@ -50,16 +50,29 @@ createPriceElement();
 
 let totalPrice = 0.00;
 
+// eslint-disable-next-line max-lines-per-function
 const createCartItemElement = ({ id, title, price }) => {
   const li = document.createElement('li');
   li.className = 'cart__item';
   li.id = id;
   li.innerText = `ID: ${id} | TITLE: ${title} | PRICE: $${price}`;
+  const ident = id;
   li.addEventListener('click', () => {
     document.getElementById(id).remove();
+    const report = JSON.parse(localStorage.getItem('cartItems'));
+    const arr = [];
+    report.forEach((e) => {
+      if (e.id !== ident) {
+        arr.push(e);
+      } 
+    });
+    console.log(arr);
+    localStorage.removeItem('cartItems');
+    localStorage.setItem('cartItems', JSON.stringify(arr));
     totalPrice -= price;
     totalPrice = Math.round(totalPrice * 100) / 100;
-    document.getElementsByClassName(tp)[0].innerText = totalPrice; 
+    document.getElementsByClassName(tp)[0].innerText = totalPrice;
+    localStorage.setItem('price', totalPrice); 
   });
   return li;
 };
@@ -75,9 +88,9 @@ const colocaNoCarrinho = async (id) => {
     const obj = { id: listaItems.id, title: listaItems.title, price: listaItems.price };
     saveCartItems(obj);
   } else {
-    localStorage.removeItem('cartItems');
     const obj = { id: listaItems.id, title: listaItems.title, price: listaItems.price };
     report.push(obj);
+    localStorage.removeItem('cartItems');
     localStorage.setItem('cartItems', JSON.stringify(report));
   }
 
@@ -145,6 +158,7 @@ const createLoadingElement = async () => {
 
 window.onload = async () => {
   createLoadingElement();
+  totalPrice = JSON.parse(localStorage.getItem('price')); 
   await fetchProducts('computador');
   baixaProdutos(); 
   const report = JSON.parse(getSavedCartItems());
