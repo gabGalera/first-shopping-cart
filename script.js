@@ -109,6 +109,16 @@ const getIdFromProductItem = (product) => product.querySelector('span.item_id').
  * @returns {Element} Elemento de um item do carrinho.
  */
 
+document.getElementsByClassName('empty-cart')[0].addEventListener('click', () => {
+  const numeroProdutos = document.getElementsByClassName('cart__item').length;
+  for (i = 0; i < numeroProdutos; i += 1) {
+    document.getElementsByClassName('cart__items')[0].firstElementChild.remove();
+  }
+  localStorage.clear();
+  totalPrice = 0.00;
+  document.getElementsByClassName(tp)[0].innerText = totalPrice;
+});
+
 window.onload = async () => {
   await fetchProducts('computador'); 
   baixaProdutos(); 
@@ -118,4 +128,5 @@ window.onload = async () => {
       document.getElementsByClassName('cart__items')[0].appendChild(createCartItemElement(e));
     });
   }
+  document.getElementsByClassName(tp)[0].innerText = localStorage.getItem('price');
 };
