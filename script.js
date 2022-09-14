@@ -37,12 +37,30 @@ const createCustomElement = (element, className, innerText) => {
  * @param {string} product.thumbnail - URL da imagem do produto.
  * @returns {Element} Elemento de produto.
  */
+
+const tp = 'total-price';
+
+const createPriceElement = () => {
+  const section = document.createElement('section');
+  section.className = tp;
+  document.getElementsByClassName('empty-cart')[0].insertAdjacentElement('afterend', section);
+};
+
+createPriceElement();
+
+let totalPrice = 0.00;
+
 const createCartItemElement = ({ id, title, price }) => {
   const li = document.createElement('li');
   li.className = 'cart__item';
   li.id = id;
   li.innerText = `ID: ${id} | TITLE: ${title} | PRICE: $${price}`;
-  li.addEventListener('click', () => document.getElementById(id).remove());
+  li.addEventListener('click', () => {
+    document.getElementById(id).remove();
+    totalPrice -= price;
+    totalPrice = Math.round(totalPrice * 100) / 100;
+    document.getElementsByClassName(tp)[0].innerText = totalPrice; 
+  });
   return li;
 };
 
@@ -50,8 +68,11 @@ const colocaNoCarrinho = async (id) => {
   const listaItems = await fetchItem(id);
   const items = createCartItemElement(listaItems);
   document.getElementsByClassName('cart__items')[0].appendChild(items);
-  console.log(items);
   saveCartItems(listaItems);
+  totalPrice += listaItems.price;
+  totalPrice = Math.round(totalPrice * 100) / 100;
+  localStorage.setItem('price', totalPrice);
+  document.getElementsByClassName(tp)[0].innerText = totalPrice; 
 };
 
 const createProductItemElement = ({ id, title, thumbnail }) => {
@@ -66,7 +87,7 @@ const createProductItemElement = ({ id, title, thumbnail }) => {
   
     return section;
   };
-  
+
 const baixaProdutos = async () => {
   const lista = document.getElementsByClassName('items');
   await result.forEach(async (e) => lista[0].appendChild(createProductItemElement(e)));
