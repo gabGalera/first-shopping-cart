@@ -50,7 +50,18 @@ createPriceElement();
 
 let totalPrice = 0.00;
 
-// eslint-disable-next-line max-lines-per-function
+const arrumaLocalStorage = (ident) => {
+  const report = JSON.parse(localStorage.getItem('cartItems'));
+  const arr = [];
+  report.forEach((e) => {
+    if (e.id !== ident) {
+      arr.push(e);
+    } 
+  });
+  localStorage.removeItem('cartItems');
+  localStorage.setItem('cartItems', JSON.stringify(arr));
+};
+
 const createCartItemElement = ({ id, title, price }) => {
   const li = document.createElement('li');
   li.className = 'cart__item';
@@ -59,16 +70,7 @@ const createCartItemElement = ({ id, title, price }) => {
   const ident = id;
   li.addEventListener('click', () => {
     document.getElementById(id).remove();
-    const report = JSON.parse(localStorage.getItem('cartItems'));
-    const arr = [];
-    report.forEach((e) => {
-      if (e.id !== ident) {
-        arr.push(e);
-      } 
-    });
-    console.log(arr);
-    localStorage.removeItem('cartItems');
-    localStorage.setItem('cartItems', JSON.stringify(arr));
+    arrumaLocalStorage(ident);
     totalPrice -= price;
     totalPrice = Math.round(totalPrice * 100) / 100;
     document.getElementsByClassName(tp)[0].innerText = totalPrice;
