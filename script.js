@@ -68,7 +68,19 @@ const colocaNoCarrinho = async (id) => {
   const listaItems = await fetchItem(id);
   const items = createCartItemElement(listaItems);
   document.getElementsByClassName('cart__items')[0].appendChild(items);
-  saveCartItems(listaItems);
+  
+  const report = JSON.parse(localStorage.getItem('cartItems'));
+  
+  if (report === null) {
+    const obj = { id: listaItems.id, title: listaItems.title, price: listaItems.price };
+    saveCartItems(obj);
+  } else {
+    localStorage.removeItem('cartItems');
+    const obj = { id: listaItems.id, title: listaItems.title, price: listaItems.price };
+    report.push(obj);
+    localStorage.setItem('cartItems', JSON.stringify(report));
+  }
+
   totalPrice += listaItems.price;
   totalPrice = Math.round(totalPrice * 100) / 100;
   localStorage.setItem('price', totalPrice);
@@ -135,7 +147,7 @@ window.onload = async () => {
   createLoadingElement();
   await fetchProducts('computador');
   baixaProdutos(); 
-  const report = getSavedCartItems();
+  const report = JSON.parse(getSavedCartItems());
   if (report !== null) {
     report.forEach(async (e) => {
       document.getElementsByClassName('cart__items')[0].appendChild(createCartItemElement(e));
