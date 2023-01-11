@@ -43,7 +43,15 @@ const tp = 'total-price';
 const createPriceElement = () => {
   const section = document.createElement('section');
   section.className = tp;
-  document.getElementsByClassName('empty-cart')[0].insertAdjacentElement('afterend', section);
+  document.getElementsByClassName('empty-cart')[0].insertAdjacentElement('beforebegin', section);
+};
+const numeroEmReais = (price) => {
+  if (Math.floor([price - Math.floor(price)] * 100) >= 10) {
+    return `R$ ${Math.floor(price)},${Math.floor([price - Math.floor(price)] * 100)}`;
+  } if (Math.floor([price - Math.floor(price)] * 100) > 0) {
+    return `R$ ${Math.floor(price)},${Math.floor([price - Math.floor(price)] * 100)}0`;
+  } 
+    return `R$ ${Math.floor(price)},00`;
 };
 
 createPriceElement();
@@ -66,14 +74,14 @@ const createCartItemElement = ({ id, title, price }) => {
   const li = document.createElement('li');
   li.className = 'cart__item';
   li.id = id;
-  li.innerText = `ID: ${id} | TITLE: ${title} | PRICE: $${price}`;
+  li.innerText = `ID: ${id} \n ${title} \n ${numeroEmReais(price)}`;
   const ident = id;
   li.addEventListener('click', () => {
     document.getElementById(id).remove();
     arrumaLocalStorage(ident);
     totalPrice -= price;
     totalPrice = Math.round(totalPrice * 100) / 100;
-    document.getElementsByClassName(tp)[0].innerText = totalPrice;
+    document.getElementsByClassName(tp)[0].innerText = `Subtotal: ${numeroEmReais(totalPrice)}`;
     localStorage.setItem('price', totalPrice); 
   });
   return li;
@@ -99,16 +107,17 @@ const colocaNoCarrinho = async (id) => {
   totalPrice += listaItems.price;
   totalPrice = Math.round(totalPrice * 100) / 100;
   localStorage.setItem('price', totalPrice);
-  document.getElementsByClassName(tp)[0].innerText = totalPrice; 
+  document.getElementsByClassName(tp)[0].innerText = `Subtotal: ${numeroEmReais(totalPrice)}`; 
 };
 
-const createProductItemElement = ({ id, title, thumbnail }) => {
+const createProductItemElement = ({ id, title, thumbnail, price }) => {
   const section = document.createElement('section');
   section.className = 'item';
   
   section.appendChild(createCustomElement('span', 'item_id', id));
-  section.appendChild(createCustomElement('span', 'item__title', title));
   section.appendChild(createProductImageElement(thumbnail));
+  section.appendChild(createCustomElement('span', 'item__title', title));
+  section.appendChild(createCustomElement('span', 'price', numeroEmReais(price)));
   section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'))
     .addEventListener('click', () => colocaNoCarrinho(id));
   
@@ -143,7 +152,7 @@ document.getElementsByClassName('empty-cart')[0].addEventListener('click', () =>
   }
   localStorage.clear();
   totalPrice = 0.00;
-  document.getElementsByClassName(tp)[0].innerText = totalPrice;
+  document.getElementsByClassName(tp)[0].innerText = `Subtotal: ${numeroEmReais(totalPrice)}`;
 });
 
 const createLoadingElement = async () => {
@@ -169,6 +178,7 @@ window.onload = async () => {
       document.getElementsByClassName('cart__items')[0].appendChild(createCartItemElement(e));
     });
   }
-  document.getElementsByClassName(tp)[0].innerText = localStorage.getItem('price');
+  const subTotal = `Subtotal: ${numeroEmReais(localStorage.getItem('price'))}`;
+  document.getElementsByClassName(tp)[0].innerText = subTotal;
   createLoadingElement();
 };

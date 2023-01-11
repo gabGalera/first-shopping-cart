@@ -15,8 +15,8 @@ const fetchProducts = async (QUERY) => {
       // .then((e) => e.results);
     const { results } = getAPI;
     results.forEach(async (e) => {
-      const { id, title, thumbnail } = e; 
-      result.push({ id, title, thumbnail });
+      const { id, title, thumbnail, price } = e; 
+      result.push({ id, title, thumbnail, price });
       return result;
     });
     return getAPI;
